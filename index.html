@@ -3,11 +3,37 @@
     <head>
         <link rel="stylesheet" href="style.css">
         <script src="https://cdn.jsdelivr.net/npm/pako@2.0.4/dist/pako.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </head>
     <body>
+        <canvas id="placecanvas">
+        </canvas>
+        
         <div class="slider" id="slider">
-            <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+            <input type="range" min="1" max="100" value="50" class="slider" id="timelineLoc">
         </div>
+        <script>
+            window.onload= function() {
+                initslider();
+            };
+            
+            //All slider stuff
+            function initslider() {
+                var slider = document.getElementById("timelineLoc");
+                $.getJSON("assets/place2017/metadata.json", function(data) {
+                    console.log(data);
+                    $('#timelineLoc').attr('max', data.end);
+                    $('#timelineLoc').attr('min', data.start);
+                    $('#timelineLoc').attr('value', data.defaultslider);
+                });
+            }
+            var slider = document.getElementById("timelineLoc");
+            slider.oninput = function() {
+                console.log(this.value);
+            }
+
+        </script>
+        <script src="monalisacanvas.js"></script>
         <script>
             function jsonify(blob) {
                 var jsonreader = new FileReader();
@@ -26,7 +52,7 @@
             }
             function updatebytime(time) {
                 // Could use better processing algorithm here but laziness :P
-                fetch("processing/segments/1490172525.json.gz").then( response => {
+                fetch("processing/segments/1490172515d.json.gz").then( response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error: ${response.status}`);
                     }
